@@ -52,19 +52,30 @@ def delete_person():
         if conn:
             try:
                 cur = conn.cursor()
-                cur.execute('DELETE FROM people WHERE name = %s', (name,))
-                conn.commit()
-                cur.close()
-                conn.close()
-                message = f"Persona con nombre {name} eliminada exitosamente."
+                cur.execute('SELECT email FROM people WHERE name = %s', (name,))
+                result = cur.fetchone()
+                
+                if result:
+                    # Persona encontrada
+                    email = result[0]
+                    cur.execute('DELETE FROM people WHERE name = %s', (name,))
+                    conn.commit()
+                    cur.close()
+                    conn.close()
+                    return render_template('delete_person.html', message=f"Persona eliminada correctamente: Nombre: {name}, Correo: {email}")
+                else:
+                    # Persona no encontrada
+                    cur.close()
+                    conn.close()
+                    return render_template('delete_person.html', message="No se ha borrado a nadie. La persona no existe.")
+                    
             except psycopg2.Error as e:
                 print(f"Database error: {e}")
-                message = 'Error al eliminar la persona'
+                return render_template('delete_person.html', message='Error al eliminar la persona')
         else:
-            message = 'Error en la conexión a la base de datos'
-        
-        return render_template('delete_person.html', message=message)
+            return render_template('delete_person.html', message='Error en la conexión a la base de datos')
     
+    # Servir el archivo HTML desde el directorio actual si se accede por GET
     return render_template('delete_person.html')
 
 @app.route('/get_people')
