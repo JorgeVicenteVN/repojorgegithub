@@ -4,17 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eliminar Persona</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <h1>Eliminar Persona</h1>
     <form action="/delete_person" method="POST">
         <label for="name">Nombre:</label>
         <input type="text" id="name" name="name" required>
-        <button type="submit">Eliminar</button>
+        <button type="submit" class="button">Eliminar</button>
     </form>
     {% if message %}
         <p>{{ message }}</p>
     {% endif %}
-    <a href="/">Volver al inicio</a>
+    <a class="button" href="/">Volver al inicio</a>
 </body>
 </html>
